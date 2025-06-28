@@ -3,10 +3,10 @@ import subprocess
 from pytube import YouTube
 
 
-def Download_mp3(url):
+def Download_mp3(url,path):
     yt = YouTube(url)
     audio = yt.streams.filter(only_audio=True).first()
-    audio_file = audio.download()
+    audio_file = audio.download(output_path=path)
 
     base, ext = os.path.splitext(audio_file)
     mp3_file = base + ".mp3"
@@ -30,7 +30,7 @@ def Download_mp3(url):
         print("Erreur ffmpeg :", e)
 
 
-def Download_mp4(url):
+def Download_mp4(url,path):
     yt = YouTube(url)
     video = yt.streams.get_highest_resolution()
-    video.download()
+    video.download(output_path=path)
