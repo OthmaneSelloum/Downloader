@@ -1,6 +1,6 @@
 import os
+import subprocess
 from pytube import YouTube
-from moviepy.editor import AudioFileClip
 
 
 def Download_mp3(url):
@@ -8,9 +8,26 @@ def Download_mp3(url):
     audio = yt.streams.filter(only_audio=True).first()
     audio_file = audio.download()
 
-    mp3_file = os.path.splitext(audio_file)[0] + ".mp3"
-    AudioFileClip(audio_file).write_audiofile(mp3_file)
-    os.remove(audio_file)  # Supprime l’ancien fichier (facultatif)
+    base, ext = os.path.splitext(audio_file)
+    mp3_file = base + ".mp3"
+
+    # Conversion avec ffmpeg
+    command = [
+        "ffmpeg",
+        "-i", audio_file,
+        "-vn",  # no video
+        "-ab", "192k",
+        "-ar", "44100",
+        "-y",  # overwrite without asking
+        mp3_file
+    ]
+
+    try:
+        subprocess.run(command, check=True)
+        os.remove(audio_file)  # Supprimer le fichier source (webm/mp4)
+        print(f"Téléchargé et converti : {mp3_file}")
+    except subprocess.CalledProcessError as e:
+        print("Erreur ffmpeg :", e)
 
 
 def Download_mp4(url):
