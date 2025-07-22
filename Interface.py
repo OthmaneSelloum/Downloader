@@ -20,7 +20,7 @@ ctk.set_default_color_theme("blue")
 # Création de la fenêtre principale
 app = ctk.CTk()
 app.title("Téléchargeur YouTube")
-app.geometry("500x200")
+app.geometry("700x300")
 
 # Label d'instruction
 label = ctk.CTkLabel(app, text="Entrez l'URL :", font=("Arial", 16))
